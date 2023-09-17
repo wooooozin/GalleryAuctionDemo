@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 public class AuctionApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(AuctionApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(AuctionApplication.class, args);
+    }
 
 }
