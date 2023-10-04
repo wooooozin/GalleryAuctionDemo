@@ -24,10 +24,9 @@
   - 결제 요청 : 경매 종료 시 최고 입찰자에게 결제 알림을 발송합니다.
 
 # ERD
-![ERT](doc/img/erd_image.png)
+![ERT](doc/img/erd_image_v2.png)
 
 # Trouble Shooting
 [Trouble Shooting](doc/TROUBLE_SHOOTING.md)
-
 # Tech Stack
 `JAVA`, `SPRING BOOT`, `MY SQL`, `JPA`
