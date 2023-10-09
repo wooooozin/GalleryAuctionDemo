@@ -4,6 +4,7 @@ import com.woozi.auction.artwork.dto.ArtworkDto;
 import com.woozi.auction.artwork.entity.Artwork;
 import com.woozi.auction.artwork.service.ArtworkService;
 import com.woozi.auction.common.ResultResponse;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,9 @@ public class ArtworkController {
 
     @PostMapping("/{userId}/{categoryId}") // 이 부분이 빠져 있어서 추가했습니다.
     public ResponseEntity<?> createArtwork(
-        @PathVariable Long userId,
-        @PathVariable Long categoryId,
-        @RequestPart("artworkDto") ArtworkDto artworkDto,
+        @Valid @PathVariable Long userId,
+        @Valid @PathVariable Long categoryId,
+        @Valid @RequestPart("artworkDto") ArtworkDto artworkDto,
         @RequestPart("imageFile") MultipartFile imageFile) {
 
         if (artworkDto == null) {
