@@ -7,6 +7,7 @@ import com.woozi.auction.common.ResultResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +23,9 @@ public class ArtworkController {
 
     private final ArtworkService artworkService;
 
-    @PostMapping("/{userId}/{categoryId}") // 이 부분이 빠져 있어서 추가했습니다.
+    @PostMapping("/{userId}/{categoryId}")
     public ResponseEntity<?> createArtwork(
-        @Valid @PathVariable Long userId,
+        @Valid @PathVariable Long userId, // JWT 변경 필요
         @Valid @PathVariable Long categoryId,
         @Valid @RequestPart("artworkDto") ArtworkDto artworkDto,
         @RequestPart("imageFile") MultipartFile imageFile) {
@@ -71,4 +72,23 @@ public class ArtworkController {
             ResultResponse.success(status.value(), "작품 조회 성공", artwork), status
         );
     }
+
+    @GetMapping("/page")
+    public ResponseEntity<?> getAllArtworkPaged(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+    ) {
+        Page<Artwork> artworkPage = artworkService.getAllArtworksPaged(page, size);
+        if (artworkPage.isEmpty()) {
+            return new ResponseEntity<>(
+                ResultResponse.error(HttpStatus.NOT_FOUND.value(), "등록된 작품이 없습니다."),
+                HttpStatus.NOT_FOUND
+            );
+        }
+        return new ResponseEntity<>(
+            ResultResponse.success(HttpStatus.OK.value(), "전체 작품 조회 성송", artworkPage),
+            HttpStatus.OK
+        );
+    }
+
 }

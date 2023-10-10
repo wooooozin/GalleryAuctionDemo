@@ -8,9 +8,11 @@ import com.woozi.auction.category.repository.CategoryRepository;
 import com.woozi.auction.exception.EntityNotFoundException;
 import com.woozi.auction.user.entity.User;
 import com.woozi.auction.user.repository.UserRepository;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,5 +53,11 @@ public class ArtworkServiceImpl implements ArtworkService {
     public Artwork getArtworkById(Long artworkId) {
         return artworkRepository.findById(artworkId)
             .orElseThrow(() -> new EntityNotFoundException(artworkId, "작품을 찾을 수 없습니다."));
+    }
+
+    @Override
+    public Page<Artwork> getAllArtworksPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return artworkRepository.findAll(pageable);
     }
 }
