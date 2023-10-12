@@ -10,12 +10,15 @@ import com.woozi.auction.exception.EntityNotFoundException;
 import com.woozi.auction.user.entity.User;
 import com.woozi.auction.user.repository.UserRepository;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArtworkServiceImpl implements ArtworkService {
@@ -35,11 +38,16 @@ public class ArtworkServiceImpl implements ArtworkService {
             .orElseThrow(
                 () -> new EntityNotFoundException(artworkDto.getCategoryId(), "카테고리를 찾을 수 없습니다. ")
             );
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime endedDate = LocalDateTime.parse(artworkDto.getEndedDate(), formatter);
 
+
+        log.info("Received endedDate: " + artworkDto.getEndedDate());
         Artwork artwork = Artwork.builder()
             .title(artworkDto.getTitle())
             .description(artworkDto.getDescription())
             .uploadDate(LocalDateTime.now())
+            .endedDate(endedDate)
             .image(artworkDto.getImage())
             .startingPrice(artworkDto.getStartingPrice())
             .currentPrice(artworkDto.getStartingPrice())
@@ -70,11 +78,14 @@ public class ArtworkServiceImpl implements ArtworkService {
             .orElseThrow(
                 () -> new EntityNotFoundException(artworkUpdateDto.getCategoryId(), "카테고리를 찾을 수 없습니다.")
             );
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime endedDate = LocalDateTime.parse(artworkUpdateDto.getEndedDate(), formatter);
 
         artwork.setCategory(category);
         artwork.setTitle(artworkUpdateDto.getTitle());
         artwork.setDescription(artworkUpdateDto.getDescription());
         artwork.setLastModifiedDate(LocalDateTime.now());
+        artwork.setEndedDate(endedDate);
 
         return artworkRepository.save(artwork);
     }

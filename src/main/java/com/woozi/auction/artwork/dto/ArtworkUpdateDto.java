@@ -24,4 +24,7 @@ public class ArtworkUpdateDto {
     @NotNull(message = "카테고리 ID는 필수입니다.")
     private Long categoryId;
 
+    @NotNull(message = "경매 종료 시간은 필수입니다.")
+    private String endedDate;
+
 }

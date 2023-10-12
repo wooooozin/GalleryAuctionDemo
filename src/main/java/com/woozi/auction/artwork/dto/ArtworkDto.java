@@ -29,6 +29,9 @@ public class ArtworkDto {
 
     private LocalDateTime uploadDate;
 
+    @NotNull(message = "경매 종료 시간은 필수입니다.")
+    private String endedDate;
+
     @NotNull(message = "시작 가격은 필수입니다.")
     @Min(value = 1, message = "시작 가격은 1 이상이어야 합니다.")
     private Double startingPrice;

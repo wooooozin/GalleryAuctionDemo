@@ -43,6 +43,9 @@ public class Artwork {
     @Column(name = "upload_date", nullable = false)
     private LocalDateTime uploadDate;
 
+    @Column(name = "ended_date", nullable = false)
+    private LocalDateTime endedDate;
+
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
 
