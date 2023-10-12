@@ -1,6 +1,7 @@
 package com.woozi.auction.artwork.service;
 
 import com.woozi.auction.artwork.dto.ArtworkDto;
+import com.woozi.auction.artwork.dto.ArtworkUpdateDto;
 import com.woozi.auction.artwork.entity.Artwork;
 import com.woozi.auction.artwork.repository.ArtworkRepository;
 import com.woozi.auction.category.entity.Category;
@@ -59,5 +60,22 @@ public class ArtworkServiceImpl implements ArtworkService {
     public Page<Artwork> getAllArtworksPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return artworkRepository.findAll(pageable);
+    }
+
+    @Override
+    public Artwork updateArtwork(Long artworkId, ArtworkUpdateDto artworkUpdateDto) {
+        Artwork artwork = artworkRepository.findById(artworkId)
+            .orElseThrow(() -> new EntityNotFoundException(artworkId, "작품을 찾을 수 없습니다."));
+        Category category = categoryRepository.findById(artworkUpdateDto.getCategoryId())
+            .orElseThrow(
+                () -> new EntityNotFoundException(artworkUpdateDto.getCategoryId(), "카테고리를 찾을 수 없습니다.")
+            );
+
+        artwork.setCategory(category);
+        artwork.setTitle(artworkUpdateDto.getTitle());
+        artwork.setDescription(artworkUpdateDto.getDescription());
+        artwork.setLastModifiedDate(LocalDateTime.now());
+
+        return artworkRepository.save(artwork);
     }
 }

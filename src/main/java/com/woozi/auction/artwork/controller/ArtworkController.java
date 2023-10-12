@@ -1,6 +1,7 @@
 package com.woozi.auction.artwork.controller;
 
 import com.woozi.auction.artwork.dto.ArtworkDto;
+import com.woozi.auction.artwork.dto.ArtworkUpdateDto;
 import com.woozi.auction.artwork.entity.Artwork;
 import com.woozi.auction.artwork.service.ArtworkService;
 import com.woozi.auction.common.ResultResponse;
@@ -87,6 +88,27 @@ public class ArtworkController {
         }
         return new ResponseEntity<>(
             ResultResponse.success(HttpStatus.OK.value(), "전체 작품 조회 성송", artworkPage),
+            HttpStatus.OK
+        );
+    }
+
+    @PutMapping("/{artworkId}")
+    public ResponseEntity<?> updateArtwork(
+        @PathVariable Long artworkId,
+        @Valid @RequestBody ArtworkUpdateDto artworkUpdateDto
+
+    ) {
+        Artwork updatedArtwork = artworkService.updateArtwork(artworkId, artworkUpdateDto);
+
+        if (updatedArtwork == null) {
+            return new ResponseEntity<>(
+                ResultResponse.error(HttpStatus.NOT_FOUND.value(), "수정할 작품을 찾을 수 없습니다."),
+                HttpStatus.NOT_FOUND
+            );
+        }
+
+        return new ResponseEntity<>(
+            ResultResponse.success(HttpStatus.OK.value(), "작품이 수정되었습니다.", null),
             HttpStatus.OK
         );
     }
