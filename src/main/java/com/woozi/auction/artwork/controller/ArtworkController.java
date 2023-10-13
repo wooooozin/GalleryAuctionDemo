@@ -113,4 +113,13 @@ public class ArtworkController {
         );
     }
 
+    @DeleteMapping("/{artworkId}")
+    public ResponseEntity<?> deleteArtwork(@PathVariable Long artworkId) {
+        artworkService.deleteArtwork(artworkId);
+        return new ResponseEntity<>(
+            ResultResponse.success(HttpStatus.OK.value(), "작품이 삭제되었습니다.", null),
+            HttpStatus.OK
+        );
+    }
+
 }

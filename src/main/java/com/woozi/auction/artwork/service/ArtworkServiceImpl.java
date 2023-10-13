@@ -89,4 +89,17 @@ public class ArtworkServiceImpl implements ArtworkService {
 
         return artworkRepository.save(artwork);
     }
+
+    @Override
+    public void deleteArtwork(Long artworkId) {
+        Artwork artwork = artworkRepository.findById(artworkId)
+            .orElseThrow(() -> new EntityNotFoundException(artworkId, "작품을 찾을 수 없습니다."));
+
+        if(artwork.getIsDeleted()) {
+            throw new IllegalStateException("작품 ID " + artworkId + "은(는) 이미 삭제되었습니다.");
+        }
+
+        artwork.setIsDeleted(true);
+        artworkRepository.save(artwork);
+    }
 }

@@ -15,4 +15,6 @@ public interface ArtworkService {
     Page<Artwork> getAllArtworksPaged(int page, int size);
 
     Artwork updateArtwork(Long artworkId, ArtworkUpdateDto artworkUpdateDto);
+
+    void deleteArtwork(Long artworkId);
 }
