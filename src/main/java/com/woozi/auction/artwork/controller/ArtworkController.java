@@ -38,7 +38,7 @@ public class ArtworkController {
     public ResponseEntity<?> createArtwork(
         @Valid @PathVariable Long userId, // JWT 변경 필요
         @Valid @PathVariable Long categoryId,
-        @Valid @RequestBody ArtworkDto artworkDto,
+        @Valid @RequestPart ArtworkDto artworkDto,
         @RequestPart("imageFile") MultipartFile imageFile) {
 
         if (artworkDto == null) {
