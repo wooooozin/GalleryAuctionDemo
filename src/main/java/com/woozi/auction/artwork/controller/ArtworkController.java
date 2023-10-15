@@ -5,6 +5,10 @@ import com.woozi.auction.artwork.dto.ArtworkUpdateDto;
 import com.woozi.auction.artwork.entity.Artwork;
 import com.woozi.auction.artwork.service.ArtworkService;
 import com.woozi.auction.common.ResultResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,15 +24,21 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/artwork")
+@Api(tags = "Artwork APIs")
 public class ArtworkController {
 
     private final ArtworkService artworkService;
 
     @PostMapping("/{userId}/{categoryId}")
+    @ApiOperation(value = "작품 등록")
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "Success"),
+        @ApiResponse(code = 400, message = "Invalid Input")
+    })
     public ResponseEntity<?> createArtwork(
         @Valid @PathVariable Long userId, // JWT 변경 필요
         @Valid @PathVariable Long categoryId,
-        @Valid @RequestPart("artworkDto") ArtworkDto artworkDto,
+        @Valid @RequestBody ArtworkDto artworkDto,
         @RequestPart("imageFile") MultipartFile imageFile) {
 
         if (artworkDto == null) {
@@ -58,6 +68,7 @@ public class ArtworkController {
     }
 
     @GetMapping("/{artworkId}")
+    @ApiOperation(value = "작품 조회하기")
     public ResponseEntity<?> getArtworkById(
         @PathVariable Long artworkId
     ) {
@@ -75,6 +86,7 @@ public class ArtworkController {
     }
 
     @GetMapping("/page")
+    @ApiOperation(value = "작품 전체 조회")
     public ResponseEntity<?> getAllArtworkPaged(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size
@@ -93,6 +105,7 @@ public class ArtworkController {
     }
 
     @PutMapping("/{artworkId}")
+    @ApiOperation(value = "작품 수정")
     public ResponseEntity<?> updateArtwork(
         @PathVariable Long artworkId,
         @Valid @RequestBody ArtworkUpdateDto artworkUpdateDto
@@ -114,6 +127,7 @@ public class ArtworkController {
     }
 
     @DeleteMapping("/{artworkId}")
+    @ApiOperation(value = "작품 삭제")
     public ResponseEntity<?> deleteArtwork(@PathVariable Long artworkId) {
         artworkService.deleteArtwork(artworkId);
         return new ResponseEntity<>(
